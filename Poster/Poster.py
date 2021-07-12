@@ -131,7 +131,7 @@ class Poster(Renderer):
 						if self.lngg != "":
 							url_tmdb += "&language={}".format(self.lngg)
 							
-						open("/tmp/urls","a+").write("%s\n"%url_tmdb)
+						# open("/tmp/urls","a+").write("%s\n"%url_tmdb)
 						poster = json.load(urlopen(url_tmdb))['results'][0]['poster_path']
 						if poster:
 							url_poster = "https://image.tmdb.org/t/p/w{}{}".format(self.sz, poster)

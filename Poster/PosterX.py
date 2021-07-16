@@ -61,13 +61,11 @@ class PosterX(Renderer):
 		self.pth = "/tmp/poster/"
 		self.lngg = None
 		self.sz = "185,278"
-		self.src = None
 		self.nxts = 1
 		self.intCheck()
 		self.timer = eTimer()
 		self.timer.callback.append(self.showPoster)
 
-		
 	def applySkin(self, desktop, parent):
 		attribs = []
 		for (attrib, value,) in self.skinAttributes:
@@ -79,8 +77,6 @@ class PosterX(Renderer):
 				self.nxts = int(value)
 			if attrib == "size":
 				self.sz = value.split(",")[0]
-			if attrib.find("source"):
-				self.src = value.split(".")[0]
 			attribs.append((attrib, value))
 		self.skinAttributes = attribs
 		return Renderer.applySkin(self, desktop, parent)
@@ -119,9 +115,6 @@ class PosterX(Renderer):
 				self.instance.setScale(2)
 				self.instance.show()
 			else:
-				# if self.src == "100":
-					# self.instance.hide()
-					# return
 				start_new_thread(self.downloadPoster, ())
 		else:
 			self.instance.hide()

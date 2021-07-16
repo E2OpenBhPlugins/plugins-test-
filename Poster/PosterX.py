@@ -119,9 +119,9 @@ class PosterX(Renderer):
 				self.instance.setScale(2)
 				self.instance.show()
 			else:
-				if self.src == "100":
-					self.instance.hide()
-					return
+				# if self.src == "100":
+					# self.instance.hide()
+					# return
 				start_new_thread(self.downloadPoster, ())
 		else:
 			self.instance.hide()

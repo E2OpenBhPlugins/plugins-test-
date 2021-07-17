@@ -7,7 +7,7 @@ import json, os, re
 from urllib2 import urlopen, quote
 
 tmdb_api = "3c3efcf47c3577558812bb9d64019d65"
-path_folder = "/media/sda3/poster/"
+path_folder = "/tmp/"
 
 class pstr(Renderer):
 

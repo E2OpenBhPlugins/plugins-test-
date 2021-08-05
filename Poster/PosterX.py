@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# by digiteng...07.2021
+# by digiteng...07.2021, 08.2021(stb lang support)
 # © Provided that digiteng rights are protected, all or part of the code can be used, modified...
 # russian and py3 support by sunriser...
 # downloading in the background while zaping...
@@ -17,6 +17,13 @@
 from Renderer import Renderer
 from enigma import ePixmap, eTimer, loadJPG, eEPGCache, getBestPlayableServiceReference
 import json, re, os, socket, sys
+
+try:
+	from Components.config import config
+	lng = config.osd.language.value
+except:
+	lng = None
+	pass
 
 tmdb_api = "3c3efcf47c3577558812bb9d64019d65"
 epgcache = eEPGCache.getInstance()
@@ -122,6 +129,7 @@ class PosterX(Renderer):
 			return
 
 	def downloadPoster(self):
+		
 		events = None
 		evntNm = ""
 		try:
@@ -172,6 +180,11 @@ class PosterX(Renderer):
 							url_tmdb += "&year={}".format(year)
 						if self.lngg != None:
 							url_tmdb += "&language={}".format(self.lngg)
+						elif lng != None:
+							url_tmdb += "&language={}".format(lng[:-3])
+						else:
+							pass
+						open("/tmp/ln", "a+").write("%s\n"%url_tmdb)
 						poster = json.load(urlopen(url_tmdb))['results'][0]['poster_path']
 						url_poster = "https://image.tmdb.org/t/p/w{}{}".format(self.sz, poster)
 						dwn_poster = self.pth + "{}.jpg".format(evntNm)

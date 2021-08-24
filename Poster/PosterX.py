@@ -14,7 +14,7 @@
 # for epg, event
 # <widget source="Event" render="PosterX" position="931,184" size="185,278" path="/media/hdd/poster/" zPosition="9" />
 
-from Renderer import Renderer
+from Components.Renderer.Renderer import Renderer
 from enigma import ePixmap, eTimer, loadJPG, eEPGCache, getBestPlayableServiceReference
 import json, re, os, socket, sys
 
@@ -184,7 +184,6 @@ class PosterX(Renderer):
 							url_tmdb += "&language={}".format(lng[:-3])
 						else:
 							pass
-						open("/tmp/ln", "a+").write("%s\n"%url_tmdb)
 						poster = json.load(urlopen(url_tmdb))['results'][0]['poster_path']
 						url_poster = "https://image.tmdb.org/t/p/w{}{}".format(self.sz, poster)
 						dwn_poster = self.pth + "{}.jpg".format(evntNm)

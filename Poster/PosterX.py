@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-# by digiteng...07.2021, 08.2021(stb lang support)
+# by digiteng...07.2021, 
+# 08.2021(stb lang support),
+# 09.2021 mini fixes
 # © Provided that digiteng rights are protected, all or part of the code can be used, modified...
 # russian and py3 support by sunriser...
 # downloading in the background while zaping...
@@ -15,8 +17,12 @@
 # <widget source="Event" render="PosterX" position="931,184" size="185,278" path="/media/hdd/poster/" zPosition="9" />
 
 from Components.Renderer.Renderer import Renderer
-from enigma import ePixmap, eTimer, loadJPG, eEPGCache, getBestPlayableServiceReference
-import json, re, os, socket, sys
+from enigma import ePixmap, eTimer, loadJPG, eEPGCache
+import json
+import re
+import os
+import socket
+import sys
 
 try:
 	from Components.config import config
@@ -84,7 +90,7 @@ class PosterX(Renderer):
 			if attrib == "nexts":
 				self.nxts = int(value)
 			if attrib == "size":
-				self.sz = value.split(",")[0]
+				self.sz = str(value.split(",")[0])
 			attribs.append((attrib, value))
 		self.skinAttributes = attribs
 		return Renderer.applySkin(self, desktop, parent)
@@ -129,7 +135,7 @@ class PosterX(Renderer):
 			return
 
 	def downloadPoster(self):
-		
+		poster = None
 		events = None
 		evntNm = ""
 		try:
@@ -145,8 +151,8 @@ class PosterX(Renderer):
 				sd = events[i][6]
 				ed = events[i][5]
 				fd = "{}\n{}\n{}".format(title, sd, ed)
-				srch=None
-				year=None
+				srch = None
+				year = None
 				checkTV = [ "serial", "series", "serie", "serien", "série", "séries", "serious",
 				"folge", "episodio", "episode", "épisode", "l'épisode", "ep.", 
 				"staffel", "soap", "doku", "tv", "talk", "show", "news", "factual", "entertainment", "telenovela", 
@@ -184,13 +190,21 @@ class PosterX(Renderer):
 							url_tmdb += "&language={}".format(lng[:-3])
 						else:
 							pass
+						
 						poster = json.load(urlopen(url_tmdb))['results'][0]['poster_path']
-						url_poster = "https://image.tmdb.org/t/p/w{}{}".format(self.sz, poster)
-						dwn_poster = self.pth + "{}.jpg".format(evntNm)
-						with open(dwn_poster,'wb') as f:
-							f.write(urlopen(url_poster).read())
-							self.timer.start(10, True)
+						if poster != None:
+							url_poster = "https://image.tmdb.org/t/p/w{}{}".format(self.sz, poster)
+							open("/tmp/pstrx", "w").write("%s\n"%self.sz)
+							dwn_poster = self.pth + "{}.jpg".format(evntNm)
+							self.savePoster(dwn_poster, url_poster)
 					except:
 						pass
 		except:
 			pass
+
+	def savePoster(self, dwn_poster, url_poster):
+		open("/tmp/pstrx2", "w").write("%s\n"%url_poster)
+		with open(dwn_poster,'wb') as f:
+			f.write(urlopen(url_poster).read())
+		self.timer.start(10, True)
+		

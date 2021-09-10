@@ -1,5 +1,5 @@
 #!/bin/sh
-
+echo ""
 if [ -d /usr/lib/enigma2/python/Plugins/Extensions/AudioPlus ]; then
 	rm -rf /usr/lib/enigma2/python/Plugins/Extensions/AudioPlus
 fi
@@ -10,7 +10,8 @@ elif [ -d "/var/lib/opkg" ]; then
 	os='OpenOE' 
 else 
 	os='Unknown' 
-fi 
+fi
+
 echo "Your Stb : " $os
 
 if [ ! -f "/usr/bin/gst-launch-1.0" ]; then 
@@ -27,8 +28,8 @@ if [ ! -f "/usr/bin/gst-launch-1.0" ]; then
 		apt-get -y install gstreamer1.0-plugins-good-mpg123
 		apt-get -y install gstreamer1.0-plugins-good-equalizer
 	fi
-	
-	
+fi
+
 wget -qP /tmp/ "https://github.com/digiteng/plugins-test-/raw/master/AudioPlus.tar.gz"
 
 echo "New Version Installing...wait..."
@@ -41,6 +42,4 @@ sleep 2
 init 4
 echo "Restarting your enigma2 gui..."
 init 3
-exit
-
-
+exit 0

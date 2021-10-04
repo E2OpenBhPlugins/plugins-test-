@@ -14,21 +14,21 @@ echo "your stb : " $os
 
 fi
 
-if [ ! -f "/usr/bin/gst-launch-1.0" ]; then 
-	if [ $os = "OpenOE" ]; then
-		opkg update
-		opkg install gstreamer1.0-plugins-base-volume
-		opkg install gstreamer1.0-plugins-good-ossaudio
-		opkg install gstreamer1.0-plugins-good-mpg123
-		opkg install gstreamer1.0-plugins-good-equalizer
-	else 
-		apt-get update
-		apt-get -y install gstreamer1.0-plugins-base-volume 
-		apt-get -y install gstreamer1.0-plugins-good-ossaudio
-		apt-get -y install gstreamer1.0-plugins-good-mpg123
-		apt-get -y install gstreamer1.0-plugins-good-equalizer
-	fi
+# if [ ! -f "/usr/bin/gst-launch-1.0" ]; then 
+if [ $os = "OpenOE" ]; then
+	opkg update
+	opkg install gstreamer1.0-plugins-base-volume
+	opkg install gstreamer1.0-plugins-good-ossaudio
+	opkg install gstreamer1.0-plugins-good-mpg123
+	opkg install gstreamer1.0-plugins-good-equalizer
+else 
+	apt-get update
+	apt-get -y install gstreamer1.0-plugins-base-volume 
+	apt-get -y install gstreamer1.0-plugins-good-ossaudio
+	apt-get -y install gstreamer1.0-plugins-good-mpg123
+	apt-get -y install gstreamer1.0-plugins-good-equalizer
 fi
+# fi
 
 
 wget -qP /tmp/ "https://github.com/digiteng/plugins-test-/raw/master/AudioPlus.tar.gz"

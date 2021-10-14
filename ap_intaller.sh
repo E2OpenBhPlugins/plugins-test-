@@ -28,15 +28,15 @@ fi
 	# apt-get -y install gstreamer1.0-plugins-good-equalizer
 # fi
 sleep 1
-# wget -qP /tmp/ "https://github.com/digiteng/plugins-test-/raw/master/AudioPlus.tar.gz"
-# echo "New Version Installing...wait..."
-# sleep 1
-# tar -xzf /tmp/AudioPlus.tar.gz -C /usr/lib/enigma2/python/Plugins/Extensions
-# sleep 1
-# rm -rf /tmp/AudioPlus.tar.gz
+wget -qP /tmp/ "https://github.com/digiteng/plugins-test-/raw/master/AudioPlus.tar.gz"
+echo "New Version Installing...wait..."
+sleep 1
+tar -xzf /tmp/AudioPlus.tar.gz -C /usr/lib/enigma2/python/Plugins/Extensions
+sleep 1
+rm -rf /tmp/AudioPlus.tar.gz
 echo "New Version Installed"
-# sleep 2
-# init 4
-# echo "Restarting your enigma2 gui..."
-# init 3
+sleep 2
+init 4
+echo "Restarting your enigma2 gui..."
+init 3
 exit 0

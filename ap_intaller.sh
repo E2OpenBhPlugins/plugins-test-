@@ -11,6 +11,16 @@ sleep 2
 if [ -f /tmp/download_ap.py ]; then
 	python /tmp/download_ap.py
 fi
-
 sleep 1
+if [ -f /tmp/AudioPlus.tar.gz ]; then
+	tar -xzf /tmp/AudioPlus.tar.gz -C /usr/lib/enigma2/python/Plugins/Extensions
+	sleep 1
+	rm -rf /tmp/AudioPlus.tar.gz
+fi
+echo "New Version Installed"
+# sleep 2
+# init 4
+# echo "Restarting your enigma2 gui..."
+# init 3
 exit 0
+

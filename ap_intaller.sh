@@ -1,5 +1,8 @@
 #!/bin/sh
 echo ""
+# wget -q "--no-check-certificate" https://github.com/digiteng/plugins-test-/raw/master/ap_intaller.sh -O - | /bin/sh
+echo "old version deleting..."
+sleep 1
 if [ -d /usr/lib/enigma2/python/Plugins/Extensions/AudioPlus ]; then
 	rm -rf /usr/lib/enigma2/python/Plugins/Extensions/AudioPlus
 fi

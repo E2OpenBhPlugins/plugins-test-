@@ -1,45 +1,16 @@
 #!/bin/sh
-echo ""
-# wget -q "--no-check-certificate" https://github.com/digiteng/plugins-test-/raw/master/ap_intaller.sh -O - | /bin/sh
-echo "old version deleting..."
+sleep 1
+echo "Old Version Deleting..."
 sleep 1
 if [ -d /usr/lib/enigma2/python/Plugins/Extensions/AudioPlus ]; then
 	rm -rf /usr/lib/enigma2/python/Plugins/Extensions/AudioPlus
 fi
 
-# if [ -f /var/lib/dpkg ]; then
-	# checkos='/var/lib/dpkg'
-	# os='Dream'
-# else
-	# checkos='/var/lib/opkg'
-	# os='OpenOE'
-# echo "your stb : " $os
-
-# fi
-
-# if [ $os = "OpenOE" ]; then
-	# opkg update
-	# opkg install gstreamer1.0-plugins-base-volume
-	# opkg install gstreamer1.0-plugins-good-ossaudio
-	# opkg install gstreamer1.0-plugins-good-mpg123
-	# opkg install gstreamer1.0-plugins-good-equalizer
-# else 
-	# apt-get update
-	# apt-get -y install gstreamer1.0-plugins-base-volume 
-	# apt-get -y install gstreamer1.0-plugins-good-ossaudio
-	# apt-get -y install gstreamer1.0-plugins-good-mpg123
-	# apt-get -y install gstreamer1.0-plugins-good-equalizer
-# fi
-sleep 1
-wget -qP /tmp/ "https://github.com/digiteng/plugins-test-/raw/master/AudioPlus.tar.gz"
-echo "New Version Installing...wait..."
-sleep 1
-tar -xzf /tmp/AudioPlus.tar.gz -C /usr/lib/enigma2/python/Plugins/Extensions
-sleep 1
-rm -rf /tmp/AudioPlus.tar.gz
-echo "New Version Installed"
+wget "https://github.com/digiteng/plugins-test-/raw/master/download_ap.py" -P /tmp/
 sleep 2
-init 4
-echo "Restarting your enigma2 gui..."
-init 3
+if [ -f /tmp/download_ap.py ]; then
+	python /tmp/download_ap.py
+
+echo "New Version Installed"
+sleep 1
 exit 0

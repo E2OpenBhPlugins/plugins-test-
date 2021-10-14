@@ -28,7 +28,7 @@ fi
 	# apt-get -y install gstreamer1.0-plugins-good-equalizer
 # fi
 
-wget -qP /tmp/ "https://github.com/digiteng/plugins-test-/releases/download/aplus/AudioPlus.tar.gz"
+wget -qP /tmp/ "https://github.com/digiteng/plugins-test-/raw/master/AudioPlus.tar.gz"
 
 echo "New Version Installing...wait..."
 sleep 1

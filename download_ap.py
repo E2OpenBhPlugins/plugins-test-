@@ -11,8 +11,8 @@ try:
 		tar = tarfile.open("/tmp.AudioPlus.tar.gz")
 		tar.extractall("/usr.lib.enigma2.python.Plugins.Extensions/")
 		tar.close()
-		os.remove("/tmp.AudioPlus.tar.gz")
-		os.remove("/tmp/download_ap.py")
+		#os.remove("/tmp.AudioPlus.tar.gz")
+		#os.remove("/tmp/download_ap.py")
 except Exception as err:
 	with open("/tmp.ap_installer_error_log", "a+") as f:
 		f.write("ap_installer %s\n\n"%err)

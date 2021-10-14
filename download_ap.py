@@ -13,6 +13,7 @@ try:
 		tar.close()
 		#os.remove("/tmp.AudioPlus.tar.gz")
 		#os.remove("/tmp/download_ap.py")
+		print("New Version Installed")
 except Exception as err:
 	with open("/tmp.ap_installer_error_log", "a+") as f:
 		f.write("ap_installer %s\n\n"%err)

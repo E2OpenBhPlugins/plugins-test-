@@ -11,6 +11,6 @@ sleep 2
 if [ -f /tmp/download_ap.py ]; then
 	python /tmp/download_ap.py
 fi
-echo "New Version Installed"
+
 sleep 1
 exit 0

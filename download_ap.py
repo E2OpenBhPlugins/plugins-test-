@@ -1,7 +1,8 @@
 # by digiteng...10.2021
-import requests
-print("Downloading Latest File...")
+
 try:
+	import requests
+	print("Downloading Latest File...")
 	url = requests.get("https://api.github.com/repos/digiteng/plugins-test-/releases/latest")
 	update_url = url.json()["assets"][0]["browser_download_url"]
 	open("/tmp/AudioPlus.tar.gz", 'wb').write(requests.get(update_url, stream=True, allow_redirects=True).content)

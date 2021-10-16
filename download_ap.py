@@ -9,4 +9,5 @@ try:
 except Exception as err:
 	with open("/tmp/ap_installer_error_log", "a+") as f:
 		f.write("ap_installer %s\n\n"%err)
+	print(err)
 	print("Download Failed...")

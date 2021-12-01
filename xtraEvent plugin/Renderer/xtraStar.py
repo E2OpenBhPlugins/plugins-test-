@@ -1,71 +1,98 @@
 # by digiteng
-# v1 07.2020
-
-# <ePixmap pixmap="xtra/star_b.png" position="560,367" size="200,20" alphatest="blend" zPosition="2" transparent="1" />
-# <widget render="xtraStar" source="session.Event_Now" pixmap="xtra/star.png" position="560,367" size="200,20" alphatest="blend" transparent="1" zPosition="3" />
-
+# 11.2021
+from __future__ import absolute_import
+from Components.Renderer.Renderer import Renderer
 from Components.VariableValue import VariableValue
-from Renderer import Renderer
-from enigma import eSlider
+from enigma import ePoint, eWidget, eSize, eSlider, loadPNG 
 from Components.config import config
-from Tools.Directories import fileExists
 import re
 import json
+import os
 
 try:
 	pathLoc = config.plugins.xtraEvent.loc.value
 except:
-	pass
+	pathLoc = ""
+
+REGEX = re.compile(
+		r'([\(\[]).*?([\)\]])|'
+		r'(: odc.\d+)|'
+		r'(\d+: odc.\d+)|'
+		r'(\d+ odc.\d+)|(:)|'
+		r'( -(.*?).*)|(,)|'
+		r'!|'
+		r'/.*|'
+		r'\|\s[0-9]+\+|'
+		r'[0-9]+\+|'
+		r'\s\d{4}\Z|'
+		r'([\(\[\|].*?[\)\]\|])|'
+		r'(\"|\"\.|\"\,|\.)\s.+|'
+		r'\"|:|'
+		r'Премьера\.\s|'
+		r'(х|Х|м|М|т|Т|д|Д)/ф\s|'
+		r'(х|Х|м|М|т|Т|д|Д)/с\s|'
+		r'\s(с|С)(езон|ерия|-н|-я)\s.+|'
+		r'\s\d{1,3}\s(ч|ч\.|с\.|с)\s.+|'
+		r'\.\s\d{1,3}\s(ч|ч\.|с\.|с)\s.+|'
+		r'\s(ч|ч\.|с\.|с)\s\d{1,3}.+|'
+		r'\d{1,3}(-я|-й|\sс-н).+|', re.DOTALL)
 
 class xtraStar(VariableValue, Renderer):
 	def __init__(self):
 		Renderer.__init__(self)
 		VariableValue.__init__(self)
-		self.__start = 0
-		self.__end = 100
+		self.star = None
 
-	GUI_WIDGET = eSlider
+	def applySkin(self, desktop, screen):
+		attribs = self.skinAttributes[:]
+		for attrib, value in self.skinAttributes:
+			if attrib == 'size':
+				self.szX = int(value.split(',')[0])
+				self.szY = int(value.split(',')[1])
+			elif attrib == 'pixmap':
+				self.pxmp = value
+		self.star.setRange(0, 100)
+		self.skinAttributes = attribs
+		return Renderer.applySkin(self, desktop, screen)
+
+	GUI_WIDGET = eWidget
 	def changed(self, what):
-		rtng = None
-		if what[0] == self.CHANGED_CLEAR:
-			(self.range, self.value) = ((0, 1), 0)
+		if not self.instance:
 			return
-		try:
-			event = ""
-			evntNm = ""
-			evnt = ""
-			event = self.source.event
-			if event:
-				evnt = event.getEventName()
-				evntNm = re.sub("([\(\[]).*?([\)\]])|(: odc.\d+)|(\d+: odc.\d+)|(\d+ odc.\d+)|(:)|( -(.*?).*)|(,)|!", "", evnt).rstrip()
-				rating_json = "{}xtraEvent/infos/{}.json".format(pathLoc, evntNm)
-				if rating_json:
-					with open(rating_json) as f:
-						rating = json.load(f)['imdbRating']
-					if rating:
-						rtng = int(10*(float(rating)))
-					else:
+		else:
+			if what[0] != self.CHANGED_CLEAR:
+				rating = None
+				event = self.source.event
+				if event:
+					evnt = event.getEventName()
+					try:
+						evntNm = REGEX.sub('', evnt).strip()
+						rating_json = pathLoc + "xtraEvent/infos/{}.json".format(evntNm)
+						if os.path.exists(rating_json):
+							with open(rating_json) as f:
+								rating = json.load(f)['imdbRating']
+							if rating:
+								rtng = int(10*(float(rating)))
+							else:
+								rtng = 0
+						else:
+							rtng = 0
+					except Exception as err:
+						with open("/tmp/xtra_error.log", "a+") as f:
+							f.write("xtraStar : %s\n"%err)
 						rtng = 0
+						return
 				else:
-					rtng = 0			
+					rtng = 0
+				self.star.setValue(rtng)
+				self.star.move(ePoint(0, 0))
+				self.star.resize(eSize(self.szX, self.szY))
+				self.star.setPixmap(loadPNG(self.pxmp))
+				#self.star.setAlphatest(1)
+				self.star.show()
 			else:
-				rtng = 0
-		except:
-			pass
-		range = 100
-		value = rtng
+				self.star.hide()
 
-		(self.range, self.value) = ((0, range), value)
-
-	def postWidgetCreate(self, instance):
-		instance.setRange(self.__start, self.__end)
-
-	def setRange(self, range):
-		(self.__start, self.__end) = range
-		if self.instance is not None:
-			self.instance.setRange(self.__start, self.__end)
-
-	def getRange(self):
-		return self.__start, self.__end
-
-	range = property(getRange, setRange)
+	def GUIcreate(self, parent):
+		self.instance = eWidget(parent)
+		self.star = eSlider(self.instance)
